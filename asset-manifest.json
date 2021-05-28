@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/twiso-design-tool/static/css/main.d7aa4946.chunk.css",
+    "main.js": "/twiso-design-tool/static/js/main.039f8b90.chunk.js",
+    "main.js.map": "/twiso-design-tool/static/js/main.039f8b90.chunk.js.map",
+    "runtime-main.js": "/twiso-design-tool/static/js/runtime-main.5024639a.js",
+    "runtime-main.js.map": "/twiso-design-tool/static/js/runtime-main.5024639a.js.map",
+    "static/js/2.c4db19de.chunk.js": "/twiso-design-tool/static/js/2.c4db19de.chunk.js",
+    "static/js/2.c4db19de.chunk.js.map": "/twiso-design-tool/static/js/2.c4db19de.chunk.js.map",
+    "static/js/3.d728a4d1.chunk.js": "/twiso-design-tool/static/js/3.d728a4d1.chunk.js",
+    "static/js/3.d728a4d1.chunk.js.map": "/twiso-design-tool/static/js/3.d728a4d1.chunk.js.map",
+    "index.html": "/twiso-design-tool/index.html",
+    "static/css/main.d7aa4946.chunk.css.map": "/twiso-design-tool/static/css/main.d7aa4946.chunk.css.map",
+    "static/js/2.c4db19de.chunk.js.LICENSE.txt": "/twiso-design-tool/static/js/2.c4db19de.chunk.js.LICENSE.txt",
+    "static/media/addImage.5167341a.svg": "/twiso-design-tool/static/media/addImage.5167341a.svg",
+    "static/media/addShape.efc88c00.svg": "/twiso-design-tool/static/media/addShape.efc88c00.svg",
+    "static/media/addText.3a1cc6fe.svg": "/twiso-design-tool/static/media/addText.3a1cc6fe.svg",
+    "static/media/backArrow.0fa2b863.svg": "/twiso-design-tool/static/media/backArrow.0fa2b863.svg",
+    "static/media/circle.0bedfa10.svg": "/twiso-design-tool/static/media/circle.0bedfa10.svg",
+    "static/media/ctrlRotate.8ba52be7.svg": "/twiso-design-tool/static/media/ctrlRotate.8ba52be7.svg",
+    "static/media/ctrlScale.3fdf1e45.svg": "/twiso-design-tool/static/media/ctrlScale.3fdf1e45.svg",
+    "static/media/ctrlStretch.018481ed.svg": "/twiso-design-tool/static/media/ctrlStretch.018481ed.svg",
+    "static/media/line.60fd0829.svg": "/twiso-design-tool/static/media/line.60fd0829.svg",
+    "static/media/photo.3b16c800.jpg": "/twiso-design-tool/static/media/photo.3b16c800.jpg",
+    "static/media/roundedSquare.2ee5319e.svg": "/twiso-design-tool/static/media/roundedSquare.2ee5319e.svg",
+    "static/media/square.1a317c4f.svg": "/twiso-design-tool/static/media/square.1a317c4f.svg",
+    "static/media/triangle.67408d75.svg": "/twiso-design-tool/static/media/triangle.67408d75.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5024639a.js",
+    "static/js/2.c4db19de.chunk.js",
+    "static/css/main.d7aa4946.chunk.css",
+    "static/js/main.039f8b90.chunk.js"
+  ]
+}
