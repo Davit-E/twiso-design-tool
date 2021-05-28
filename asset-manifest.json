@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/twiso-design-tool/static/css/main.d7aa4946.chunk.css",
-    "main.js": "/twiso-design-tool/static/js/main.039f8b90.chunk.js",
-    "main.js.map": "/twiso-design-tool/static/js/main.039f8b90.chunk.js.map",
+    "main.css": "/twiso-design-tool/static/css/main.6dea0999.chunk.css",
+    "main.js": "/twiso-design-tool/static/js/main.a7c0df20.chunk.js",
+    "main.js.map": "/twiso-design-tool/static/js/main.a7c0df20.chunk.js.map",
     "runtime-main.js": "/twiso-design-tool/static/js/runtime-main.5024639a.js",
     "runtime-main.js.map": "/twiso-design-tool/static/js/runtime-main.5024639a.js.map",
     "static/js/2.c4db19de.chunk.js": "/twiso-design-tool/static/js/2.c4db19de.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.d728a4d1.chunk.js": "/twiso-design-tool/static/js/3.d728a4d1.chunk.js",
     "static/js/3.d728a4d1.chunk.js.map": "/twiso-design-tool/static/js/3.d728a4d1.chunk.js.map",
     "index.html": "/twiso-design-tool/index.html",
-    "static/css/main.d7aa4946.chunk.css.map": "/twiso-design-tool/static/css/main.d7aa4946.chunk.css.map",
+    "static/css/main.6dea0999.chunk.css.map": "/twiso-design-tool/static/css/main.6dea0999.chunk.css.map",
     "static/js/2.c4db19de.chunk.js.LICENSE.txt": "/twiso-design-tool/static/js/2.c4db19de.chunk.js.LICENSE.txt",
     "static/media/addImage.5167341a.svg": "/twiso-design-tool/static/media/addImage.5167341a.svg",
     "static/media/addShape.efc88c00.svg": "/twiso-design-tool/static/media/addShape.efc88c00.svg",
@@ -29,7 +29,7 @@
   "entrypoints": [
     "static/js/runtime-main.5024639a.js",
     "static/js/2.c4db19de.chunk.js",
-    "static/css/main.d7aa4946.chunk.css",
-    "static/js/main.039f8b90.chunk.js"
+    "static/css/main.6dea0999.chunk.css",
+    "static/js/main.a7c0df20.chunk.js"
   ]
 }
