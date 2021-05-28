@@ -1,0 +1,75 @@
+.Dropdown {
+  width: 28.75rem;
+  height: 25.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.UplaodButtonContainer {
+  width: 100%;
+  height: 4.13rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #E5E5E5;
+  margin-bottom: 0.6rem;
+}
+
+.UploadButton {
+  background: #6f7bd0;
+  border-radius: 4px;
+  padding: 0.5rem 1.56rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.UploadButton:focus {
+  outline: none;
+}
+
+.FileInput {
+  display: none;
+}
+
+.Images {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 0.5rem;
+  overflow: scroll;
+}
+
+.Images::-webkit-scrollbar {
+  display: none;
+}
+
+.Images {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.Column {
+  flex: 50%;
+}
+
+.ImageContainer {
+  width: 100%;
+  height: auto;
+  min-height: 2.38rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.Image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

@@ -1,0 +1,181 @@
+.Navigation {
+  width: 100%;
+  height: 3.125rem;
+  background: white;
+  border: 1px solid #eff1f4;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  margin-bottom: 0.56rem;
+}
+
+.BackFileInfoContainer {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.BackArrow {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.FileInfoContainer {
+  cursor: pointer;
+}
+
+.FileName {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 0.9rem;
+}
+
+.Creater {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 0.75rem;
+  color: #b5b5b5;
+}
+
+.DesignControlsContainer {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.AddTextContainer,
+.AddImageContainer,
+.AddShapeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+
+.AddImageContainer {
+  margin: 0 0.5rem;
+}
+
+.AddTextContainer:hover,
+.AddImageContainer:hover,
+.AddShapeContainer:hover {
+  background: #eceefb;
+}
+
+.AddTextContainer:hover .HoverContent,
+.AddImageContainer:hover .HoverContent,
+.AddShapeContainer:hover .HoverContent {
+  background: #eceefb;
+  display: flex;
+}
+
+.HoverContent {
+  position: absolute;
+  background: #eceefb;
+  border-radius: 2px;
+  width: auto;
+  white-space: nowrap;
+  top: 54px;
+  padding: 0.31rem 0.875rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 100;
+  display: none;
+}
+
+.HoverTriangle {
+  width: 0.69rem;
+  height: 0.38rem;
+  position: absolute;
+  top: -0.38rem;
+  border-left: 5.5px solid transparent;
+  border-right: 5.5px solid transparent;
+  border-bottom: 5.5px solid #eceefb;
+}
+
+.HoverText {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+.DownloadUserInfoContainer {
+  display: flex;
+  align-items: center;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.DownloadButton {
+  background: #6f7bd0;
+  border-radius: 4px;
+  padding: 0.5rem 1.56rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.DownloadButton:focus {
+  outline: none;
+}
+
+.User {
+  margin-left: 1rem;
+  background: #d18a72;
+  border-radius: 100%;
+  padding: 0.375rem 0.5rem;
+  cursor: pointer;
+}
+
+.UserInitials {
+  margin: 0;
+  color: white;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  user-select: none;
+}
+
+.ShapeDropdown {
+  position: absolute;
+  width: 18.125rem;
+  height: auto;
+  top: 3.55rem;
+  left: 5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
+
+.ImageDropdown {
+  position: absolute;
+  width: 28.75rem;
+  height: 25.3rem;
+  top: 3.3rem;
+  right: -1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
