@@ -49,7 +49,7 @@ const Navigation = () => {
             <p className={styles.HoverText}>Add text</p>
           </div>
         </div>
-        <div>
+        <div className={styles.DesignControl}>
           <div
             className={styles.AddImageContainer}
             onClick={addImageClickedHandler}
@@ -72,7 +72,7 @@ const Navigation = () => {
           ) : null}
         </div>
 
-        <div>
+        <div className={styles.DesignControl}>
           <div
             className={styles.AddShapeContainer}
             onClick={addShapeClickedHandler}
