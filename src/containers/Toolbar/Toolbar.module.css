@@ -1,0 +1,15 @@
+.Toolbar {
+  min-width: 100px;
+  height: 32px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.03), 0px 3px 9px rgba(0, 0, 0, 0.03);
+  border-radius: 94px;
+  border: 1px solid #ECECEC;
+  background: white;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .1s ease-in;
+}

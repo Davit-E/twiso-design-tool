@@ -1,0 +1,14 @@
+.FontsDropdown {
+  position: absolute;
+  left: 0;
+}
+.FontSizeDropdown {
+  position: absolute;
+  right: 151px;
+}
+.SketchPickerContainer,
+.TextAlignDropdown {
+  position: absolute;
+  right: 0;
+}
+

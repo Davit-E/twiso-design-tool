@@ -1,0 +1,154 @@
+.TextToolbar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+.BorderDiv {
+  width: 1px;
+  height: 20px;
+  background: #ececec;
+}
+.DownArrow {
+  width: 0.5rem;
+  height: auto;
+  user-select: none;
+}
+
+.TextAlign {
+  width: 1rem;
+  height: auto;
+  user-select: none;
+}
+
+.Bold {
+  width: 0.562rem;
+  height: auto;
+  user-select: none;
+}
+
+.Italic {
+  width: 0.438rem;
+  height: auto;
+  user-select: none;
+}
+
+.FontsContainer,
+.FontSizeContainer,
+.ColorPickerContainer,
+.FontWeightBoldContainer,
+.FontStyleItalicContainer,
+.TextAlignContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 100%;
+}
+
+.FontsContainer:hover,
+.ColorPickerContainer:hover,
+.FontWeightBoldContainer:hover,
+.FontStyleItalicContainer:hover,
+.TextAlignContainer:hover {
+  background: rgba(88, 110, 224, 0.06);
+}
+
+.FontsContainer:active,
+.FontSizeInputContainer:active,
+.ColorPickerContainer:active,
+.FontWeightBoldContainer:active,
+.FontStyleItalicContainer:active,
+.TextAlignContainer:active {
+  background: rgba(88, 110, 224, 0.12);
+}
+
+.FontsContainer p,
+.FontSizeContainer p {
+  margin: 0;
+  margin-right: 0.38rem;
+}
+.FontsContainer {
+  padding-left: 1rem;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding-right: 0.75rem;
+}
+
+.ColorPickerContainer,
+.FontWeightBoldContainer,
+.FontStyleItalicContainer {
+  padding: 0 0.75rem;
+}
+.FontSizeContainer {
+  width: 4.25rem;
+}
+.FontSizeInputContainer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FontSizeInput {
+  width: 100%;
+  padding-left: 0;
+  text-align: right;
+  height: 100%;
+  border: none;
+  font: inherit;
+  font-weight: 300;
+}
+
+.FontSizeInput:focus {
+  outline: none;
+}
+
+.FontSizeInput:hover,
+.FontSizeArrowContainer:hover {
+  background: rgba(88, 110, 224, 0.06);
+}
+.FontSizeInput::selection{
+  background: #abb6ef;
+}
+
+.FontSizeArrowContainer{
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FontSizeArrowContainer:active{
+  background: rgba(88, 110, 224, 0.12);
+}
+
+.ColorPickerBorder {
+  border: 0.2px solid #c4c4c4;
+  padding: 1px;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 30px;
+}
+
+.ColorPicker {
+  background: black;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+}
+
+.TextAlignContainer {
+  padding-left: 0.75rem;
+  padding-right: 1rem;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.Active {
+  background: rgba(88, 110, 224, 0.12);
+}

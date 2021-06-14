@@ -14,7 +14,7 @@ export const loadAndUse = (canvas, text, font) => {
 };
 
 export const updateTextStyle = (state, canvas, dispatch) => {
-  if (state.currentObject.type === 'text' && state.textState) {
+  if (state.textState) {
     state.currentObject.object._clearCache();
     for (const [key, value] of Object.entries(state.textState)) {
       if (key !== 'fontFamily') {
@@ -22,6 +22,7 @@ export const updateTextStyle = (state, canvas, dispatch) => {
       }
     }
     loadAndUse(canvas, state.currentObject.object, state.textState.fontFamily);
+    if (!state.showToolbar) dispatch({ type: 'setShowToolbar', data: true });
   }
   dispatch({ type: 'setShouldUpdateText', data: false });
 };

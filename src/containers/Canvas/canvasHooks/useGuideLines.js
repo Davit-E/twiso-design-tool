@@ -10,7 +10,7 @@ import {
   objectMovingCenterObserver,
 } from './utils/centeringGuidelines';
 
-const useAligningGuidelines = (isCanvasSet, canvas) => {
+const useGuideLines = (state, isCanvasSet, canvas) => {
   const [ctx, setCtx] = useState(null);
   const [viewportTransform, setViewportTransform] = useState(null);
   const [verticalLines, setVerticalLines] = useState([]);
@@ -31,7 +31,6 @@ const useAligningGuidelines = (isCanvasSet, canvas) => {
   const centerLineMargin = 4;
   const aligningLineColor = 'rgba(255,0,241,0.5)';
   const centerLineColor = 'rgba(255,0,241,0.5)';
-
 
   const handleMouseDown = useCallback(() => {
     setViewportTransform(canvas.viewportTransform);
@@ -134,7 +133,7 @@ const useAligningGuidelines = (isCanvasSet, canvas) => {
     setHorizontalLines([]);
     setIsInVerticalCenter(null);
     setIsInHorizontalCenter(null);
-    canvas.renderAll();
+    canvas.requestRenderAll();
   }, [canvas]);
 
   const initGuideLines = useCallback(() => {
@@ -163,6 +162,15 @@ const useAligningGuidelines = (isCanvasSet, canvas) => {
     setCanvasHeightCenterMap(heightMap);
   }, [canvasHeight, canvasWidth, canvas]);
 
+  const removelistneres = useCallback((canvas) => {
+    canvas.off('object:added');
+    canvas.off('mouse:down');
+    canvas.off('object:moving');
+    canvas.off('before:render');
+    canvas.off('after:render');
+    canvas.off('mouse:up');
+  }, []);
+
   useEffect(() => {
     if (isCanvasSet) {
       initGuideLines();
@@ -170,24 +178,19 @@ const useAligningGuidelines = (isCanvasSet, canvas) => {
   }, [isCanvasSet, initGuideLines]);
 
   useEffect(() => {
-    if (isCanvasSet && ctx) {
+    if (isCanvasSet && ctx && !state.isCroppingImage) {
       canvas.on('mouse:down', handleMouseDown);
       canvas.on('object:moving', handleMoving);
       canvas.on('before:render', handleBeforeRender);
       canvas.on('after:render', handleAfterRender);
       canvas.on('mouse:up', handleMouseUp);
-    }
+    } else if (state.isCroppingImage) removelistneres(canvas);
     return () => {
-      if (isCanvasSet && ctx) {
-        canvas.off('object:added');
-        canvas.off('mouse:down');
-        canvas.off('object:moving');
-        canvas.off('before:render');
-        canvas.off('after:render');
-        canvas.off('mouse:up');
-      }
+      if (isCanvasSet && ctx) removelistneres(canvas);
     };
   }, [
+    state.isCroppingImage,
+    removelistneres,
     isCanvasSet,
     ctx,
     canvas,
@@ -199,4 +202,4 @@ const useAligningGuidelines = (isCanvasSet, canvas) => {
   ]);
 };
 
-export default useAligningGuidelines;
+export default useGuideLines;

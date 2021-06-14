@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import styles from './Navigation.module.css';
 import backArrow from '../../assets/backArrow.svg';
 import addText from '../../assets/addText.svg';
@@ -9,28 +9,76 @@ import AppContext from '../../contexts/AppContext';
 import ShapeDropdown from './ShapeDropdown/ShapeDropdown';
 import ImageDropdown from './ImageDropdown/ImageDropdown';
 import photo from '../../assets/photo.jpg';
+import photo2 from '../../assets/photo2.jpg';
+import Backdrop from '../../components/Backdrop/Backdrop';
+import { fabric } from 'fabric';
 
-const Navigation = () => {
-  const { appDispatch } = useContext(AppContext);
-  const [isShapeDropdown, setIsShapeDropdown] = useState(false);
-  const [isImageDropdown, setisImageDropdown] = useState(false);
-  const [userFiles, setUserFiles] = useState([photo]);
+const Navigation = ({ canvas }) => {
+  const { appState, appDispatch } = useContext(AppContext);
+  const [canvasToDownload, setCanvasToDownload] = useState(null);
+  const [userFiles, setUserFiles] = useState([
+    { src: photo, type: 'image' },
+    { src: photo2, type: 'image' },
+  ]);
+  const donwloadRef = useRef(null);
 
   const addTextHandler = () => {
     appDispatch({ type: 'setShouldAddText', data: true });
-    setIsShapeDropdown(false);
-    setisImageDropdown(false);
   };
-  
+
   const addShapeClickedHandler = () => {
-    setIsShapeDropdown((prevState) => !prevState);
-    setisImageDropdown(false);
+    appDispatch({ type: 'setIsShapeDropdown', data: true });
   };
 
   const addImageClickedHandler = () => {
-    setisImageDropdown((prevState) => !prevState);
-    setIsShapeDropdown(false);
+    appDispatch({ type: 'setIsImageDropdown', data: true });
   };
+
+  const downloadClickHandler = () => {
+    let newCanvas = new fabric.Canvas();
+    let jsonCanvas = JSON.stringify(canvas);
+    newCanvas.loadFromJSON(jsonCanvas);
+    newCanvas.setDimensions({
+      width: canvas.getWidth() * 2,
+      height: canvas.getHeight() * 2,
+    });
+    newCanvas.setZoom(2);
+    // let backgroundImg = canvas.backgroundImage;
+    // if (backgroundImg) {
+    //   let imgSrc = backgroundImg._element.currentSrc;
+    //   fabric.Image.fromURL(
+    //     imgSrc,
+    //     newCanvas.requestRenderAll.bind(newCanvas),
+    //     (img) => {
+    //       newCanvas.setBackgroundImage(img, {
+    //         top: backgroundImg.top,
+    //         left: backgroundImg.left,
+    //         originX: 'left',
+    //         originY: 'top',
+    //         scaleX: backgroundImg.scaleX,
+    //         scaleY: backgroundImg.scaleY,
+    //       });
+    //     }
+    //   );
+    // }
+    setCanvasToDownload(newCanvas);
+  };
+
+  const donwloadHandler = (c) => {
+    c.getElement().toBlob((blob) => {
+      donwloadRef.current.href = URL.createObjectURL(blob);
+      donwloadRef.current.download = 'design.png';
+      donwloadRef.current.click();
+    });
+    setCanvasToDownload(null);
+  };
+
+  useEffect(() => {
+    if (canvasToDownload) {
+      console.log(canvasToDownload);
+      donwloadHandler(canvasToDownload);
+    }
+  }, [canvasToDownload]);
 
   return (
     <header className={styles.Navigation}>
@@ -61,14 +109,18 @@ const Navigation = () => {
             </div>
           </div>
 
-          {isImageDropdown ? (
-            <div className={styles.ImageDropdown}>
-              <ImageDropdown
-                close={addImageClickedHandler}
-                userFiles={userFiles}
-                setUserFiles={setUserFiles}
-              />
-            </div>
+          {appState.isImageDropdown ||
+          appState.shouldReplaceImage ||
+          appState.shouldAddCanvasBgImage ? (
+            <>
+              <Backdrop />
+              <div className={styles.ImageDropdown}>
+                <ImageDropdown
+                  userFiles={userFiles}
+                  setUserFiles={setUserFiles}
+                />
+              </div>
+            </>
           ) : null}
         </div>
 
@@ -84,15 +136,26 @@ const Navigation = () => {
             </div>
           </div>
 
-          {isShapeDropdown ? (
-            <div className={styles.ShapeDropdown}>
-              <ShapeDropdown close={addShapeClickedHandler} />
-            </div>
+          {appState.isShapeDropdown ? (
+            <>
+              <Backdrop />
+              <div className={styles.ShapeDropdown}>
+                <ShapeDropdown />
+              </div>
+            </>
           ) : null}
         </div>
       </div>
       <div className={styles.DownloadUserInfoContainer}>
-        <button className={styles.DownloadButton}>Download</button>
+        <button
+          className={styles.DownloadButton}
+          onClick={downloadClickHandler}
+        >
+          Download
+        </button>
+        <a className={styles.DownloadLink} ref={donwloadRef} href='/'>
+          Download
+        </a>
         <div className={styles.User}>
           <p className={styles.UserInitials}>DE</p>
         </div>

@@ -25,7 +25,7 @@ const fabricConfig = () => {
     scaleOrSkewActionName = controlsUtils.scaleOrSkewActionName,
     objectControls = fabric.Object.prototype.controls;
 
-  const renderIcon = (icon) => {
+  const renderScaleIcon = (icon) => {
     return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
       let size = this.cornerSize;
       ctx.save();
@@ -36,7 +36,7 @@ const fabricConfig = () => {
     };
   };
 
-  const renderStretchIcon = (icon) => {
+  const renderStretchIconX = (icon) => {
     return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
       let size = this.cornerSize;
       ctx.save();
@@ -45,7 +45,18 @@ const fabricConfig = () => {
       ctx.drawImage(icon, -size / 3.2, -size / 2, size / 1.6, size);
       ctx.restore();
     };
-  }
+  };
+
+  const renderStretchIconY = (icon) => {
+    return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
+      let size = this.cornerSize;
+      ctx.save();
+      ctx.translate(left, top);
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle + 90));
+      ctx.drawImage(icon, -size / 3.2, -size / 2, size / 1.6, size);
+      ctx.restore();
+    };
+  };
 
   objectControls.ml = new fabric.Control({
     x: -0.5,
@@ -55,7 +66,7 @@ const fabricConfig = () => {
     getActionName: scaleOrSkewActionName,
     cornerSize: 42,
     offsetY: 3,
-    render: renderStretchIcon(ctrlStretchImage),
+    render: renderStretchIconX(ctrlStretchImage),
   });
 
   objectControls.mr = new fabric.Control({
@@ -67,15 +78,7 @@ const fabricConfig = () => {
     cornerSize: 42,
     offsetY: 3,
     offsetX: 1,
-    render: renderStretchIcon(ctrlStretchImage),
-  });
-
-  objectControls.mb = new fabric.Control({
-    x: 0,
-    y: 0.5,
-    cursorStyleHandler: scaleSkewStyleHandler,
-    actionHandler: scalingYOrSkewingX,
-    getActionName: scaleOrSkewActionName,
+    render: renderStretchIconX(ctrlStretchImage),
   });
 
   objectControls.mt = new fabric.Control({
@@ -84,7 +87,24 @@ const fabricConfig = () => {
     cursorStyleHandler: scaleSkewStyleHandler,
     actionHandler: scalingYOrSkewingX,
     getActionName: scaleOrSkewActionName,
+    cornerSize: 42,
+    offsetX: -3,
+    offsetY: -1,
+    render: renderStretchIconY(ctrlStretchImage),
   });
+
+  objectControls.mb = new fabric.Control({
+    x: 0,
+    y: 0.5,
+    cursorStyleHandler: scaleSkewStyleHandler,
+    actionHandler: scalingYOrSkewingX,
+    getActionName: scaleOrSkewActionName,
+    cornerSize: 42,
+    offsetX: -3,
+    offsetY: 1,
+    render: renderStretchIconY(ctrlStretchImage),
+  });
+
 
   objectControls.tl = new fabric.Control({
     x: -0.5,
@@ -94,7 +114,7 @@ const fabricConfig = () => {
     cornerSize: 32,
     offsetY: 3,
     offsetX: 1,
-    render: renderIcon(ctrlScaleImage),
+    render: renderScaleIcon(ctrlScaleImage),
   });
 
   objectControls.tr = new fabric.Control({
@@ -105,7 +125,7 @@ const fabricConfig = () => {
     cornerSize: 32,
     offsetY: 3,
     offsetX: 1,
-    render: renderIcon(ctrlScaleImage),
+    render: renderScaleIcon(ctrlScaleImage),
   });
 
   objectControls.bl = new fabric.Control({
@@ -116,7 +136,7 @@ const fabricConfig = () => {
     cornerSize: 32,
     offsetY: 3,
     offsetX: 1,
-    render: renderIcon(ctrlScaleImage),
+    render: renderScaleIcon(ctrlScaleImage),
   });
 
   objectControls.br = new fabric.Control({
@@ -127,7 +147,7 @@ const fabricConfig = () => {
     cornerSize: 32,
     offsetY: 3,
     offsetX: 1,
-    render: renderIcon(ctrlScaleImage),
+    render: renderScaleIcon(ctrlScaleImage),
   });
 
   objectControls.mtr = new fabric.Control({
@@ -139,20 +159,12 @@ const fabricConfig = () => {
     cursorStyleHandler: controlsUtils.rotationStyleHandler,
     withConnection: false,
     actionName: 'rotate',
-    render: renderIcon(ctrlRotateImage),
+    render: renderScaleIcon(ctrlRotateImage),
   });
 
   if (fabric.Textbox) {
     let textBoxControls = (fabric.Textbox.prototype.controls = {});
-
     textBoxControls.mtr = objectControls.mtr;
-    textBoxControls.tr = objectControls.tr;
-    textBoxControls.br = objectControls.br;
-    textBoxControls.tl = objectControls.tl;
-    textBoxControls.bl = objectControls.bl;
-    textBoxControls.mt = objectControls.mt;
-    textBoxControls.mb = objectControls.mb;
-
     textBoxControls.mr = new fabric.Control({
       x: 0.5,
       y: 0,
@@ -162,7 +174,7 @@ const fabricConfig = () => {
       cornerSize: 42,
       offsetY: 3,
       offsetX: 1,
-      render: renderStretchIcon(ctrlStretchImage),
+      render: renderStretchIconX(ctrlStretchImage),
     });
 
     textBoxControls.ml = new fabric.Control({
@@ -173,9 +185,42 @@ const fabricConfig = () => {
       actionName: 'resizing',
       cornerSize: 42,
       offsetY: 3,
-      render: renderStretchIcon(ctrlStretchImage),
+      render: renderStretchIconX(ctrlStretchImage),
     });
   }
+
+  let line = (fabric.Line.prototype.controls = {});
+  line.mtr = objectControls.mtr;
+  line.ml = new fabric.Control({
+    x: -0.5,
+    y: 0,
+    cursorStyleHandler: scaleSkewStyleHandler,
+    actionHandler: scalingXOrSkewingY,
+    getActionName: scaleOrSkewActionName,
+    cornerSize: 30,
+    offsetY: 3,
+    offsetX: 11,
+    render: renderScaleIcon(ctrlScaleImage),
+  });
+
+  line.mr = new fabric.Control({
+    x: 0.5,
+    y: 0,
+    cursorStyleHandler: scaleSkewStyleHandler,
+    actionHandler: scalingXOrSkewingY,
+    getActionName: scaleOrSkewActionName,
+    cornerSize: 30,
+    offsetY: 3,
+    offsetX: -10,
+    render: renderScaleIcon(ctrlScaleImage),
+  });
+
+  let image = (fabric.Image.prototype.controls = {});
+  image.mtr = objectControls.mtr;
+  image.tr = objectControls.tr;
+  image.br = objectControls.br;
+  image.tl = objectControls.tl;
+  image.bl = objectControls.bl;
 };
 
 export default fabricConfig;

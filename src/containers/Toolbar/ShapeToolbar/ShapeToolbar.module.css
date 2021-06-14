@@ -1,0 +1,125 @@
+.ShapeToolbar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+}
+
+.BorderDiv {
+  width: 1px;
+  height: 20px;
+  background: #ececec;
+}
+
+.DownArrow {
+  width: 0.5rem;
+  height: auto;
+  user-select: none;
+}
+
+.FillContainer,
+.StrokeContainer,
+.StrokeWidthContainer {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 100%;
+}
+
+.FillContainer:hover,
+.StrokeContainer:hover {
+  background: rgba(88, 110, 224, 0.06);
+}
+
+.FillContainer:active,
+.StrokeContainer:active {
+  background: rgba(88, 110, 224, 0.12);
+}
+
+.FillContainer p,
+.StrokeContainer p {
+  margin: 0;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.FillContainer {
+  padding-left: 1rem;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding-right: 0.75rem;
+}
+.StrokeContainer {
+  padding: 0 0.75rem;
+}
+.ColorPickerBorder {
+  border: 0.2px solid #c4c4c4;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 30px;
+  margin-right: 0.3125rem;
+}
+
+.ColorPicker {
+  background: black;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+}
+
+.StrokeWidthContainer {
+  width: 4.25rem;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  overflow: hidden;
+}
+
+.StrokeWidthInputContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.StrokeWidthInput {
+  width: 100%;
+  padding-left: 0;
+  text-align: right;
+  height: 100%;
+  border: none;
+  font: inherit;
+  font-weight: 300;
+}
+
+.StrokeWidthInput:focus {
+  outline: none;
+}
+
+.StrokeWidthInput:hover,
+.StrokeWidthArrowContainer:hover {
+  background: rgba(88, 110, 224, 0.06);
+}
+
+.StrokeWidthInput::selection {
+  background: #abb6ef;
+}
+
+.StrokeWidthArrowContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 0.5rem;
+}
+
+.StrokeWidthInput:active,
+.StrokeWidthArrowContainer:active {
+  background: rgba(88, 110, 224, 0.12);
+}
+

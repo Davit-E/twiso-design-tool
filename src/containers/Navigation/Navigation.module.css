@@ -6,7 +6,6 @@
   display: flex;
   justify-content: space-between;
   padding: 0 2rem;
-  margin-bottom: 0.56rem;
 }
 
 .BackFileInfoContainer {
@@ -61,6 +60,7 @@
   border-radius: 100%;
   padding: 0.75rem;
   cursor: pointer;
+  user-select: none;
 }
 
 .AddImageContainer {
@@ -153,7 +153,7 @@
   height: auto;
   top: 3.55rem;
   right: -7rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,4 +182,8 @@
   box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
     0px 8px 24px -4px rgba(24, 39, 75, 0.08);
   border-radius: 4px;
+}
+
+.DownloadLink {
+  display: none;
 }

@@ -2,22 +2,31 @@ import React, { useContext, useRef } from 'react';
 import styles from './ImageDropdown.module.css';
 import AppContext from '../../../contexts/AppContext';
 
-const ImageDropdown = ({ close, setUserFiles, userFiles }) => {
-  const { appDispatch } = useContext(AppContext);
+const ImageDropdown = ({ setUserFiles, userFiles }) => {
+  const { appState, appDispatch } = useContext(AppContext);
   const fileInput = useRef(null);
   const clickHandler = (e) => {
+    let type = 'setImageToAdd';
+    if (appState.shouldAddCanvasBgImage) {
+      type = 'setCanvasBackgroundImage'
+    }
     if (e.target.tagName === 'IMG') {
-      appDispatch({ type: 'setImageToAdd', data: e.target });
-      close();
+      appDispatch({ type, data: e.target.src });
     } else if (e.target.classList.contains(styles.ImageContainer)) {
-      appDispatch({ type: 'setImageToAdd', data: e.target.childNodes[0] });
-      close();
+      appDispatch({ type, data: e.target.childNodes[0].src });
     }
   };
+
   const inputChangeHandler = () => {
     if (fileInput.current.files[0]) {
       let file = fileInput.current.files[0];
-      setUserFiles((prevSate) => [URL.createObjectURL(file), ...prevSate]);
+      let type = 'image';
+      if (file.type === 'image/svg+xml') type = 'svg';
+      console.log(file);
+      setUserFiles((prevSate) => [
+        { src: URL.createObjectURL(file), type },
+        ...prevSate,
+      ]);
     }
   };
 
@@ -35,7 +44,7 @@ const ImageDropdown = ({ close, setUserFiles, userFiles }) => {
           Upload image
         </button>
         <input
-          accept='image/png, image/gif, image/jpeg'
+          accept='image/png, image/gif, image/jpeg, image/svg+xml'
           className={styles.FileInput}
           ref={fileInput}
           type='file'
@@ -47,8 +56,21 @@ const ImageDropdown = ({ close, setUserFiles, userFiles }) => {
         <div className={styles.Column}>
           {oddArr.map((el, i) => {
             return (
-              <div key={'odd' + i} className={styles.ImageContainer}>
-                <img className={styles.Image} src={el} alt='' />
+              <div
+                key={'odd' + i}
+                className={[
+                  styles.ImageContainer,
+                  el.type === 'svg' ? 'isSvg' : null,
+                ].join(' ')}
+              >
+                <img
+                  className={[
+                    styles.Image,
+                    el.type === 'svg' ? 'isSvg' : null,
+                  ].join(' ')}
+                  src={el.src}
+                  alt='asset'
+                />
               </div>
             );
           })}
@@ -56,8 +78,21 @@ const ImageDropdown = ({ close, setUserFiles, userFiles }) => {
         <div className={styles.Column}>
           {evenArr.map((el, i) => {
             return (
-              <div key={'even' + i} className={styles.ImageContainer}>
-                <img className={styles.Image} src={el} alt='' />
+              <div
+                key={'even' + i}
+                className={[
+                  styles.ImageContainer,
+                  el.type === 'svg' ? 'isSvg' : null,
+                ].join(' ')}
+              >
+                <img
+                  className={[
+                    styles.Image,
+                    el.type === 'svg' ? 'isSvg' : null,
+                  ].join(' ')}
+                  src={el.src}
+                  alt='asset'
+                />
               </div>
             );
           })}
