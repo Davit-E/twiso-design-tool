@@ -4,7 +4,6 @@ import styles from './StrokeWidthDropdown.module.css';
 const StrokeWidthDropdown = ({ setIsDropDown, dispatch, isLine }) => {
   const optionsClickHandler = (e) => {
     if (e.target.tagName === 'LI') {
-      console.log(e.target.textContent);
       dispatch({ type: 'setShapeStrokeWidth', data: +e.target.textContent });
       dispatch({ type: 'setShowToolbar', data: false });
       setIsDropDown(false);

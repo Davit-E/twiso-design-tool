@@ -12,8 +12,10 @@ const ShowControls = {
   mtr: true,
 };
 
+
+
 export const addNewImage = (state, canvas, dispatch, id, updateId) => {
-  let image = state.imageToAdd;
+  let image = state.imageToAdd.src;
   if (state.shouldReplaceImage) {
     let active = canvas.getActiveObject();
     fabric.Image.fromURL(image, (img) => {
@@ -24,6 +26,7 @@ export const addNewImage = (state, canvas, dispatch, id, updateId) => {
       img.setControlsVisibility(ShowControls);
       img.id = active.id;
       img.cornerRadius = active.cornerRadius;
+      img.isSvg = state.imageToAdd.type === 'svg'
       canvas.remove(active);
       canvas.add(img).setActiveObject(img);
       canvas.requestRenderAll();
@@ -38,6 +41,7 @@ export const addNewImage = (state, canvas, dispatch, id, updateId) => {
       img.setControlsVisibility(ShowControls);
       img.id = id;
       img.cornerRadius = 0;
+      img.isSvg = state.imageToAdd.type === 'svg'
       canvas.add(img).setActiveObject(img);
       canvas.requestRenderAll();
       updateId();
@@ -55,6 +59,7 @@ export const addNewText = (canvas, state, dispatch, id, updateId) => {
     padding: 10,
     width: 130,
     splitByGrapheme: true,
+    cursorWidth: 0.5,
     ...state.textState,
   });
   text.id = id;
@@ -66,7 +71,7 @@ export const addNewText = (canvas, state, dispatch, id, updateId) => {
 const addNewRect = () => {
   let rect = new fabric.Rect({
     left: 100,
-    top: 200,
+    top: 100,
     width: 152,
     height: 152,
     noScaleCache: false,
@@ -89,7 +94,7 @@ const addNewRoundedRect = () => {
 const addNewCircle = () => {
   let circle = new fabric.Circle({
     left: 100,
-    top: 200,
+    top: 100,
     radius: 76,
     noScaleCache: false,
     strokeUniform: true,
@@ -104,7 +109,7 @@ const addNewCircle = () => {
 const addNewTriangle = () => {
   let triangle = new fabric.Triangle({
     left: 100,
-    top: 200,
+    top: 100,
     width: 152,
     height: 150,
     noScaleCache: false,
@@ -120,7 +125,7 @@ const addNewTriangle = () => {
 const addNewLine = () => {
   let line = new fabric.Line([0, 0, 300, 0], {
     left: 100,
-    top: 200,
+    top: 100,
     stroke: 'rgba(196,196,196,1)',
     strokeWidth: 2,
     padding: 10,

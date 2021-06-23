@@ -30,11 +30,11 @@ const TextDropdowns = ({
     if (
       coords &&
       coords.coordY + maxDropdownHeight + DropdownOffset + DropdownPadding >
-        state.canvasHeight
+        state.canvasState.height * state.canvasState.zoom
     ) {
       setDropdownStyle({ bottom: 41 });
     }
-  }, [state.canvasHeight, coords]);
+  }, [state.canvasState, coords]);
 
   return (
     <>

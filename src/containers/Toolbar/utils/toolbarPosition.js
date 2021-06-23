@@ -4,7 +4,7 @@ export const calcPosition = (
   canvasHeight,
   toolbar,
   toolbarOffset,
-  toolbarPadding
+  toolbarPadding,
 ) => {
   console.log(currentCoords);
   let toolbarWidth = toolbar.offsetWidth;

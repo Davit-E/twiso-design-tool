@@ -9,7 +9,8 @@ const fabricConfig = () => {
   fabric.Object.prototype.borderColor = '#6F7BD0';
   fabric.Object.prototype.cornerStrokeColor = '#6F7BD0';
   fabric.Object.prototype.cornerStyle = 'circle';
-
+  fabric.Object.prototype.objectCaching = false;
+  
   const ctrlStretchImage = new Image();
   ctrlStretchImage.src = ctrlStretch;
   const ctrlScaleImage = new Image();
@@ -221,6 +222,19 @@ const fabricConfig = () => {
   image.br = objectControls.br;
   image.tl = objectControls.tl;
   image.bl = objectControls.bl;
+
+  let activeSelection = (fabric.ActiveSelection.prototype.controls = {});
+  activeSelection.mtr = objectControls.mtr;
+  activeSelection.tr = objectControls.tr;
+  activeSelection.br = objectControls.br;
+  activeSelection.tl = objectControls.tl;
+  activeSelection.bl = objectControls.bl;
+  let group = (fabric.Group.prototype.controls = {});
+  group.mtr = objectControls.mtr;
+  group.tr = objectControls.tr;
+  group.br = objectControls.br;
+  group.tl = objectControls.tl;
+  group.bl = objectControls.bl;
 };
 
 export default fabricConfig;

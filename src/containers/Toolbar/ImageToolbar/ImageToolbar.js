@@ -15,7 +15,7 @@ const ImageToolbar = () => {
     if (e.currentTarget.id === 'replace') {
       appDispatch({ type: 'setShouldReplaceImage', data: true });
     } else if (e.currentTarget.id === 'crop') {
-      // appDispatch({ type: 'setIsCroppingImage', data: true });
+      appDispatch({ type: 'setIsCropMode', data: true });
     }
   };
 
@@ -27,37 +27,64 @@ const ImageToolbar = () => {
     appDispatch({ type: 'setImageCornerRadius', data: val });
   };
 
-  return (
-    <div className={styles.ImageToolbar}>
+  const cropDoneHandler = () => {
+    appDispatch({ type: 'setShouldCropImage', data: true });
+    appDispatch({ type: 'setShowToolbar', data: false });
+  };
+
+  const content = (
+    <>
       <div
-        className={styles.ReaplaceContainer}
+        className={[
+          styles.ReaplaceContainer,
+          appState.imageState.isSvg ? styles.BorderStyle : null,
+        ].join(' ')}
         id='replace'
         onClick={clickHandler}
       >
         <img src={replaceImage} alt='replace' />
         <p>Replace</p>
       </div>
-      <div className={styles.BorderDiv}></div>
 
-      <div
-        className={styles.RadiusContainer}
-        id='radius'
-        onClick={clickHandler}
-      >
-        <img src={cornerRadius} alt='radius' />
-        <input
-          className={styles.RadiusInput}
-          type='number'
-          value={radiusInput}
-          onChange={radiusChangeHandler}
-        />
-      </div>
-      <div className={styles.BorderDiv}></div>
+      {!appState.imageState.isSvg ? (
+        <>
+          <div className={styles.BorderDiv}></div>
+          <div
+            className={styles.RadiusContainer}
+            id='radius'
+            onClick={clickHandler}
+          >
+            <img src={cornerRadius} alt='radius' />
+            <input
+              className={styles.RadiusInput}
+              type='number'
+              value={radiusInput}
+              onChange={radiusChangeHandler}
+            />
+          </div>
+          <div className={styles.BorderDiv}></div>
+          <div
+            className={styles.CropContainer}
+            id='crop'
+            onClick={clickHandler}
+          >
+            <img src={cropImage} alt='replace' />
+            <p>Crop</p>
+          </div>
+        </>
+      ) : null}
+    </>
+  );
 
-      <div className={styles.CropContainer} id='crop' onClick={clickHandler}>
-        <img src={cropImage} alt='replace' />
-        <p>Crop</p>
-      </div>
+  return (
+    <div className={styles.ImageToolbar}>
+      {!appState.isCropMode ? (
+        content
+      ) : (
+        <div className={styles.DoneContainer} onClick={cropDoneHandler}>
+          Done
+        </div>
+      )}
     </div>
   );
 };

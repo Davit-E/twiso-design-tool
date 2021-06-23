@@ -1,156 +1,267 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { fabric } from 'fabric';
 
+const cropStartHandler = (active, box) => {
+  box.on('moving', (e) => {
+    let objectHeight = box.height * box.scaleY;
+    let objectWidth = box.width * box.scaleX;
+    let boundHeight = active.height * active.scaleY;
+    let boundWidth = active.width * active.scaleX;
+    let top = box.top;
+    let left = box.left;
+    let bottom = box.top + objectHeight;
+    let right = box.left + objectWidth;
+    let topBound = active.top;
+    let bottomBound = topBound + boundHeight;
+    let leftBound = active.left;
+    let rightBound = leftBound + boundWidth;
+    //left
+    if (left < leftBound) box.left = leftBound;
+    //top
+    if (top < topBound) box.top = topBound;
+    //right
+    if (right > rightBound) box.left = rightBound - objectWidth;
+    //bottom
+    if (bottom > bottomBound) box.top = bottomBound - objectHeight;
+  });
+
+  box.on('scaling', (e) => {
+    let objectHeight = box.height * box.scaleY;
+    let objectWidth = box.width * box.scaleX;
+    let boundHeight = active.height * active.scaleY;
+    let boundWidth = active.width * active.scaleX;
+    let top = box.top;
+    let bottom = top + objectHeight;
+    let left = box.left;
+    let right = left + objectWidth;
+    let topBound = active.top;
+    let bottomBound = topBound + boundHeight;
+    let leftBound = active.left;
+    let rightBound = leftBound + boundWidth;
+    box.left = Math.min(Math.max(left, leftBound), rightBound - objectWidth);
+    box.top = Math.min(Math.max(top, topBound), bottomBound - objectHeight);
+    if (box.scaleX > active.scaleX) {
+      box.scaleX = active.scaleX;
+      if (left < leftBound || right > rightBound) box.left = leftBound;
+    }
+    if (box.scaleY > active.scaleY) {
+      box.scaleY = active.scaleY;
+      if (top < topBound || bottom > bottomBound) box.top = topBound;
+    }
+  });
+};
+
+const getCropBox = (topBound, leftBound, activeEl) => {
+  let box = new fabric.Rect({
+    fill: 'rgba(0,0,0,0)',
+    originX: 'left',
+    originY: 'top',
+    left: leftBound,
+    top: topBound,
+    borderDashArray: [2, 2],
+    borderColor: '#dbff17',
+    width: activeEl.width,
+    height: activeEl.height,
+    scaleX: activeEl.scaleX,
+    scaleY: activeEl.scaleY,
+    selectable: true,
+    lockScalingFlip: true,
+    type: 'cropbox',
+  });
+  box.controls.mtr.visible = false;
+  return box;
+};
+
+const prepareForCrop = (active, dispatch, canvas, setAcitveEl, setCropbox) => {
+  canvas.getObjects().forEach((el) => (el.selectable = false));
+  let transformMatrix = active.calcTransformMatrix();
+  let cx = transformMatrix[4];
+  let cy = transformMatrix[5];
+  let angle = ((360 - active.angle) * Math.PI) / 180;
+
+  let leftBound =
+    cx -
+    Math.abs(
+      (active.left - cx) * Math.cos(angle) - (active.top - cy) * Math.sin(angle)
+    );
+  let topBound =
+    cy -
+    Math.abs(
+      (active.left - cx) * Math.sin(angle) + (active.top - cy) * Math.cos(angle)
+    );
+
+  active.angle = 0;
+  active.top = topBound;
+  active.left = leftBound;
+  let box = getCropBox(topBound, leftBound, active);
+  canvas.add(box);
+  canvas.setActiveObject(box);
+  dispatch({ type: 'setCurrentCoords', data: box.lineCoords });
+  setAcitveEl(active);
+  setCropbox(box);
+};
+
 const useCropImage = (state, dispatch, canvas) => {
-  const cropStartHandler = useCallback(() => {
-    canvas.getObjects().forEach((el) => {
-      el.selectable = false;
-    });
+  const [isCropping, setIsCropping] = useState(false);
+  const [activeInfo, setActiveInfo] = useState(null);
+  const [activeEl, setAcitveEl] = useState(null);
+  const [cropbox, setCropbox] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
 
-    let activeEl = canvas.getActiveObject();
-    let el = new fabric.Rect({
-      fill: 'rgba(0,0,0,0)',
-      originX: 'left',
-      originY: 'top',
-      left: activeEl.left,
-      top: activeEl.top,
-      // borderDashArray: [1, 1],
-      borderColor: '#dbff17',
-      angle: activeEl.angle,
-      width: activeEl.width * activeEl.scaleX,
-      height: activeEl.height * activeEl.scaleY,
-      selectable: true,
-      lockScalingFlip: true,
-    });
-    el.controls.mtr.visible = false;
-    canvas.add(el);
-    canvas.setActiveObject(el);
-    let angle = ((360 - activeEl.angle) * Math.PI) / 180;
-    console.log(angle);
-    console.log('bounds', activeEl.lineCoords);
-    el.on('moving', (e) => {
-      console.log('obj', el.lineCoords);
-      let objectHeight = el.height * el.scaleY;
-      let objectWidth = el.width * el.scaleX;
-      let boundHeight = activeEl.height * activeEl.scaleY;
-      let boundWidth = activeEl.width * activeEl.scaleX;
-      
-      // let top = el.top;
-      // let left = el.left;
-      // let bottom = el.top + objectHeight;
-      // let right = el.left + objectWidth;
-      let left = Math.abs(el.left * Math.cos(angle) + el.top * Math.sin(angle));
-      let top = Math.abs(el.top * Math.cos(angle) - el.left * Math.sin(angle));
-      let right = Math.abs(
-        (left + objectWidth) * Math.cos(angle) +
-          (top + objectHeight) * Math.sin(angle)
-      );
-      let bottom = Math.abs(
-        (top + objectHeight) * Math.cos(angle) -
-          (left + objectWidth) * Math.sin(angle)
-      );
+  const cropFinishHandler = useCallback((c, dispatch) => {
+    setActiveInfo(null);
+    setIsCropping(false);
+    setAcitveEl(null);
+    setCropbox(null);
+    setCroppedImage(null);
+    c.off('mouse:down');
+    c.requestRenderAll();
+    dispatch({ type: 'setShouldCropImage', data: false });
+    dispatch({ type: 'setShowToolbar', data: true });
+  }, []);
 
-      // let rightBound = leftBound + boundWidth;
-      // let bottomBound = topBound + boundHeight;
-      let topBound = Math.abs(
-        activeEl.top * Math.cos(angle) + activeEl.left * Math.sin(angle)
-      );
-      let leftBound = Math.abs(
-        activeEl.left * Math.cos(angle) - activeEl.top * Math.sin(angle)
-      );
-      let rightBound = Math.abs(
-        (leftBound + boundWidth) * Math.cos(angle) +
-          (topBound + boundHeight) * Math.sin(angle)
-      );
-      let bottomBound = Math.abs(
-        (topBound + boundHeight) * Math.cos(angle) -
-          (leftBound + boundWidth) * Math.sin(angle)
-      );
-      console.log('top: ', top);
-      console.log('left: ', left);
-      console.log('right: ', right);
-      console.log('bottom: ', bottom);
-      console.log('topBound: ', topBound);
-      console.log('leftBound: ', leftBound);
-      console.log('rightBound: ', rightBound);
-      console.log('bottomBound: ', bottomBound);
-      //left
-      if (left < leftBound) el.left = leftBound;
-      //top
-      if (top < topBound) el.top = topBound;
-      //right
-      if (right > rightBound) el.left = rightBound - objectWidth;
-      //bottom
-      if (bottom > bottomBound) el.top = bottomBound - objectHeight;
+  const cropImage = useCallback(
+    (active, box) => {
+      let ratioX = box.scaleX / active.scaleX;
+      let ratioY = box.scaleY / active.scaleY;
+      let newTop = (box.top - active.top) / active.scaleY;
+      let newLeft = (box.left - active.left) / active.scaleX;
 
-      // let elCoords = el.lineCoords;
-      // let boundCoords = activeEl.lineCoords;
-    });
+      let rect = new fabric.Rect({
+        fill: 'rgba(0,0,0,0)',
+        top: newTop,
+        left: newLeft,
+        width: box.width,
+        height: box.height,
+        scaleX: ratioX,
+        scaleY: ratioY,
+        absolutePositioned: true,
+      });
 
-    el.on('scaling', (e) => {
-      // let objectHeight = el.height * el.scaleY;
-      // let objectWidth = el.width * el.scaleX;
-      // let boundHeight = activeEl.height * activeEl.scaleY;
-      // let boundWidth = activeEl.width * activeEl.scaleX;
-      // let top = el.top;
-      // let bottom = top + objectHeight;
-      // let left = el.left;
-      // let right = left + objectWidth;
-      // let topBound = activeEl.top;
-      // let bottomBound = topBound + boundHeight;
-      // let leftBound = activeEl.left;
-      // let rightBound = leftBound + boundWidth;
-      // el.left = Math.min(Math.max(left, leftBound), rightBound - objectWidth);
-      // el.top = Math.min(Math.max(top, topBound), bottomBound - objectHeight);
-      // if (el.scaleX > 1) {
-      //   el.scaleX = 1;
-      //   if (left < leftBound || right > rightBound) el.left = leftBound;
-      // }
-      // if (el.scaleY > 1) {
-      //   el.scaleY = 1;
-      //   if (top < topBound || bottom > bottomBound) el.top = topBound;
-      // }
-      //   let angle = (activeEl.getAngle() * Math.PI) / 180;
-      //   let aspectRatio = activeEl.width / activeEl.height;
-      //   let boundWidth = activeEl.width * activeEl.scaleX;
-      //   let boundHeight = activeEl.height * activeEl.scaleY;
-      //   if (boundWidth > bounds.width) {
-      //     boundWidth = bounds.width;
-      //     var targetWidth =
-      //       (aspectRatio * boundWidth) /
-      //       (aspectRatio * Math.abs(Math.cos(angle)) + Math.abs(Math.sin(angle)));
-      //     activeEl.setScaleX(targetWidth / activeEl.width);
-      //     activeEl.setScaleY(targetWidth / activeEl.width);
-      //     boundHeight = getBoundHeight(activeEl);
-      //   }
-      //   if (boundHeight > bounds.height) {
-      //     boundHeight = bounds.height;
-      //     var targetHeight =
-      //       boundHeight /
-      //       (aspectRatio * Math.abs(Math.sin(angle)) + Math.abs(Math.cos(angle)));
-      //     activeEl.setScaleX(targetHeight / activeEl.height);
-      //     activeEl.setScaleY(targetHeight / activeEl.height);
-      //     boundWidth = getBoundWidth(activeEl);
-      //   }
-      //   //Check constraints
-      //   if (activeEl.getLeft() < bounds.x + boundWidth / 2)
-      //     activeEl.setLeft(bounds.x + boundWidth / 2);
-      //   if (activeEl.getLeft() > bounds.x + bounds.width - boundWidth / 2)
-      //     activeEl.setLeft(bounds.x + bounds.width - boundWidth / 2);
-      //   if (activeEl.getTop() < bounds.y + boundHeight / 2)
-      //     activeEl.setTop(bounds.y + boundHeight / 2);
-      //   if (activeEl.getTop() > bounds.y + bounds.height - boundHeight / 2)
-      //     activeEl.setTop(bounds.y + bounds.height - boundHeight / 2);
-    });
-
-    // dispatch({type: 'setIsCroppingImage', data: false});
-  }, [canvas]);
+      let newCanvas = new fabric.Canvas();
+      newCanvas.setDimensions({
+        width: active.width,
+        height: active.height,
+      });
+      fabric.Image.fromURL(active._element.currentSrc, (image) => {
+        newCanvas.add(image);
+        newCanvas.add(rect);
+        newCanvas.requestRenderAll();
+        let src = newCanvas.toDataURL({
+          left: rect.left,
+          top: rect.top,
+          width: rect.width * rect.scaleX,
+          height: rect.height * rect.scaleY,
+        });
+        fabric.Image.fromURL(src, (img) => {
+          img.scaleToWidth(box.width * box.scaleX);
+          img.id = active.id;
+          canvas.remove(active);
+          setCroppedImage(img);
+        });
+      });
+    },
+    [canvas]
+  );
 
   useEffect(() => {
-    if (state.isCroppingImage) {
-      cropStartHandler();
+    if (state.shouldCropImage && activeEl && cropbox) {
+      cropImage(activeEl, cropbox);
     }
-  }, [cropStartHandler, state, dispatch, canvas]);
+  }, [state.shouldCropImage, cropImage, activeEl, cropbox]);
+
+  // If Cropped Image
+  useEffect(() => {
+    if (croppedImage && state.shouldCropImage) {
+      croppedImage.controls.mtr.visible = true;
+      let id = 1;
+      canvas.getObjects().forEach((el) => {
+        if (el.type === 'cropbox') canvas.remove(el);
+        else if (el.id !== 'background') el.selectable = true;
+        if (el.id > id) id = el.id;
+      });
+      croppedImage.id = id + 1;
+      for (let [key, value] of Object.entries(activeInfo)) {
+        croppedImage[key] = value;
+      }
+      dispatch({
+        type: 'setCurrentObject',
+        data: { type: 'image', data: croppedImage },
+      });
+      dispatch({
+        type: 'setImageCornerRadius',
+        data: activeInfo.cornerRadius,
+      });
+      canvas.add(croppedImage).setActiveObject(croppedImage);
+      dispatch({
+        type: 'setCurrentCoords',
+        data: croppedImage.lineCoords,
+      });
+      dispatch({ type: 'setIsCropMode', data: false });
+      cropFinishHandler(canvas, dispatch);
+    }
+  }, [
+    cropbox,
+    activeInfo,
+    croppedImage,
+    state,
+    dispatch,
+    canvas,
+    cropFinishHandler,
+  ]);
+
+  /// Preparation For Crop
+  useEffect(() => {
+    if (state.isCropMode) {
+      let active = canvas.getActiveObject();
+      setActiveInfo({
+        cornerRadius: active.cornerRadius,
+        top: active.top,
+        left: active.left,
+        angle: active.angle,
+      });
+      prepareForCrop(active, dispatch, canvas, setAcitveEl, setCropbox);
+    }
+  }, [state.isCropMode, canvas, dispatch]);
+
+  /// If Cropbox and Active El start Crop
+  useEffect(() => {
+    if (cropbox && activeEl) {
+      cropStartHandler(activeEl, cropbox);
+      setIsCropping(true);
+    }
+  }, [cropbox, activeEl]);
+
+  // Listen to Canvas Click
+  useEffect(() => {
+    if (cropbox && state.isCropMode) {
+      canvas.on('mouse:down', (e) => {
+        if (e.target && e.target.id === state.currentObject.object.id) {
+          canvas.setActiveObject(cropbox);
+        } else if (!e.target || e.target.type !== 'cropbox') {
+          dispatch({ type: 'setIsCropMode', data: false });
+        }
+      });
+    }
+  }, [cropbox, state, dispatch, canvas]);
+
+  // Dispose of Crop
+  useEffect(() => {
+    if (isCropping && !state.isCropMode && !state.shouldCropImage) {
+      canvas.getObjects().forEach((el) => {
+        if (el.type === 'cropbox') canvas.remove(el);
+        else if (el.id === state.currentObject.object.id) {
+          canvas.setActiveObject(el);
+          el.left = activeInfo.left;
+          el.top = activeInfo.top;
+          el.angle = activeInfo.angle;
+        }
+        el.controls.mtr.visible = true;
+        el.selectable = true;
+      });
+      cropFinishHandler(canvas, dispatch);
+    }
+  }, [activeInfo, isCropping, state, cropFinishHandler, canvas, dispatch]);
 };
 
 export default useCropImage;

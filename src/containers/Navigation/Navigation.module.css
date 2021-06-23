@@ -154,10 +154,6 @@
   top: 3.55rem;
   right: -7rem;
   padding: 0.75rem 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   z-index: 200;
   background: #ffffff;
   border: 1px solid #ececec;
@@ -184,6 +180,16 @@
   border-radius: 4px;
 }
 
-.DownloadLink {
-  display: none;
+.DownloadDropdown {
+  position: absolute;
+  width: 14rem;
+  height: 8rem;
+  top: 3.3rem;
+  right: 0.5rem;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
 }

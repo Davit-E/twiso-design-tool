@@ -40,7 +40,6 @@ export const strokeWidthChangeHandler = (
   setStrokeWidthInput,
   isLine
 ) => {
-  console.log(e.target.value);
   setStrokeWidthInput(e.target.value);
   let data = +e.target.value;
   if (isLine && data <= 0) data = 1;

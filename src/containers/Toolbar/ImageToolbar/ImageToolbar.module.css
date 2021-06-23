@@ -15,7 +15,8 @@
 
 .ReaplaceContainer,
 .RadiusContainer,
-.CropContainer {
+.CropContainer,
+.DoneContainer {
   user-select: none;
   display: flex;
   align-items: center;
@@ -23,12 +24,12 @@
   cursor: pointer;
   height: 100%;
 }
-
+.DoneContainer:hover,
 .ReaplaceContainer:hover,
 .CropContainer:hover {
   background: rgba(88, 110, 224, 0.06);
 }
-
+.DoneContainer:active,
 .ReaplaceContainer:active,
 .CropContainer:active {
   background: rgba(88, 110, 224, 0.12);
@@ -47,6 +48,12 @@
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
   padding-right: 0.75rem;
+}
+
+.DoneContainer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  border-radius: 15px;
 }
 
 .CropContainer {
@@ -84,4 +91,8 @@
 
 .RadiusInput::selection {
   background: #abb6ef;
+}
+
+.BorderStyle {
+  border-radius: 15px;
 }

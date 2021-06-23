@@ -7,7 +7,7 @@
   border: 1px solid #ececec;
   background: white;
   position: absolute;
-  top: 1rem;
+  top: 1.3rem;
   left: 1rem;
   display: flex;
   align-items: center;
@@ -60,9 +60,11 @@
   padding-right: 1rem;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
+  white-space: nowrap;
 }
+
 .ColorPickerBorder {
-  border: 0.2px solid #c4c4c4;
+  border: 0.1px solid #c4c4c4;
   height: 1rem;
   width: 1rem;
   border-radius: 30px;

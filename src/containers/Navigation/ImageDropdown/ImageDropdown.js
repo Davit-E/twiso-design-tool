@@ -7,13 +7,18 @@ const ImageDropdown = ({ setUserFiles, userFiles }) => {
   const fileInput = useRef(null);
   const clickHandler = (e) => {
     let type = 'setImageToAdd';
+    let imageType = 'image';
+    if (e.target.classList.contains('isSvg')) imageType = 'svg';
     if (appState.shouldAddCanvasBgImage) {
-      type = 'setCanvasBackgroundImage'
+      type = 'setCanvasBackgroundImage';
     }
     if (e.target.tagName === 'IMG') {
-      appDispatch({ type, data: e.target.src });
+      appDispatch({ type, data: { type: imageType, src: e.target.src } });
     } else if (e.target.classList.contains(styles.ImageContainer)) {
-      appDispatch({ type, data: e.target.childNodes[0].src });
+      appDispatch({
+        type,
+        data: { type: imageType, src: e.target.childNodes[0].src },
+      });
     }
   };
 

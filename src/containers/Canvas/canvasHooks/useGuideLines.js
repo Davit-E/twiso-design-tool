@@ -1,16 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import {
   drawVerticalLine,
   drawHorizontalLine,
   objectMovingObserver,
 } from './utils/aligningGuidelines';
-import {
-  showVerticalCenterLine,
-  showHorizontalCenterLine,
-  objectMovingCenterObserver,
-} from './utils/centeringGuidelines';
+import EventContext from '../../../contexts/EventContext';
+// import {
+//   showVerticalCenterLine,
+//   showHorizontalCenterLine,
+//   objectMovingCenterObserver,
+// } from './utils/centeringGuidelines';
 
 const useGuideLines = (state, isCanvasSet, canvas) => {
+  const { eventState, eventDispatch } = useContext(EventContext);
   const [ctx, setCtx] = useState(null);
   const [viewportTransform, setViewportTransform] = useState(null);
   const [verticalLines, setVerticalLines] = useState([]);
@@ -19,18 +21,18 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
 
   const [canvasWidth, setCanvasWidth] = useState(null);
   const [canvasHeight, setCanvasHeight] = useState(null);
-  const [canvasWidthCenterMap, setCanvasWidthCenterMap] = useState({});
-  const [canvasHeightCenterMap, setCanvasHeightCenterMap] = useState({});
-  const [isInVerticalCenter, setIsInVerticalCenter] = useState(null);
-  const [isInHorizontalCenter, setIsInHorizontalCenter] = useState(null);
+  // const [canvasWidthCenterMap, setCanvasWidthCenterMap] = useState({});
+  // const [canvasHeightCenterMap, setCanvasHeightCenterMap] = useState({});
+  // const [isInVerticalCenter, setIsInVerticalCenter] = useState(null);
+  // const [isInHorizontalCenter, setIsInHorizontalCenter] = useState(null);
 
   const aligningLineOffset = 5;
   const aligningLineWidth = 1;
-  const centerLineWidth = 1;
   const aligningLineMargin = 4;
   const centerLineMargin = 4;
   const aligningLineColor = 'rgba(255,0,241,0.5)';
-  const centerLineColor = 'rgba(255,0,241,0.5)';
+  // const centerLineWidth = 1;
+  // const centerLineColor = 'rgba(255,0,241,0.5)';
 
   const handleMouseDown = useCallback(() => {
     setViewportTransform(canvas.viewportTransform);
@@ -52,24 +54,24 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
         setHorizontalLines,
         aligningLineMargin
       );
-      objectMovingCenterObserver(
-        e,
-        canvas,
-        setIsInVerticalCenter,
-        setIsInHorizontalCenter,
-        canvasWidthCenterMap,
-        canvasHeightCenterMap,
-        canvasWidth,
-        canvasHeight
-      );
+      // objectMovingCenterObserver(
+      //   e,
+      //   canvas,
+      //   setIsInVerticalCenter,
+      //   setIsInHorizontalCenter,
+      //   canvasWidthCenterMap,
+      //   canvasHeightCenterMap,
+      //   canvasWidth,
+      //   canvasHeight
+      // );
     },
     [
       canvas,
       viewportTransform,
-      canvasHeight,
-      canvasHeightCenterMap,
-      canvasWidth,
-      canvasWidthCenterMap,
+      // canvasHeight,
+      // canvasHeightCenterMap,
+      // canvasWidth,
+      // canvasWidthCenterMap,
     ]
   );
 
@@ -96,43 +98,43 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     }
     setVerticalLines([]);
     setHorizontalLines([]);
-    if (isInVerticalCenter) {
-      showVerticalCenterLine(
-        canvasWidth / 2,
-        canvasHeight,
-        ctx,
-        centerLineColor,
-        centerLineWidth,
-        viewportTransform
-      );
-    }
-    if (isInHorizontalCenter) {
-      showHorizontalCenterLine(
-        canvasHeight / 2,
-        canvasWidth,
-        ctx,
-        centerLineColor,
-        centerLineWidth,
-        viewportTransform
-      );
-    }
+    // if (isInVerticalCenter) {
+    //   showVerticalCenterLine(
+    //     canvasWidth / 2,
+    //     canvasHeight,
+    //     ctx,
+    //     centerLineColor,
+    //     centerLineWidth,
+    //     viewportTransform
+    //   );
+    // }
+    // if (isInHorizontalCenter) {
+    //   showHorizontalCenterLine(
+    //     canvasHeight / 2,
+    //     canvasWidth,
+    //     ctx,
+    //     centerLineColor,
+    //     centerLineWidth,
+    //     viewportTransform
+    //   );
+    // }
   }, [
     ctx,
     viewportTransform,
     horizontalLines,
     verticalLines,
     zoom,
-    canvasHeight,
-    canvasWidth,
-    isInHorizontalCenter,
-    isInVerticalCenter,
+    // canvasHeight,
+    // canvasWidth,
+    // isInHorizontalCenter,
+    // isInVerticalCenter,
   ]);
 
   const handleMouseUp = useCallback(() => {
     setVerticalLines([]);
     setHorizontalLines([]);
-    setIsInVerticalCenter(null);
-    setIsInHorizontalCenter(null);
+    // setIsInVerticalCenter(null);
+    // setIsInHorizontalCenter(null);
     canvas.requestRenderAll();
   }, [canvas]);
 
@@ -158,8 +160,8 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     ) {
       heightMap[Math.round(i)] = true;
     }
-    setCanvasWidthCenterMap(widthMap);
-    setCanvasHeightCenterMap(heightMap);
+    // setCanvasWidthCenterMap(widthMap);
+    // setCanvasHeightCenterMap(heightMap);
   }, [canvasHeight, canvasWidth, canvas]);
 
   const removelistneres = useCallback((canvas) => {
@@ -175,21 +177,29 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     if (isCanvasSet) {
       initGuideLines();
     }
-  }, [isCanvasSet, initGuideLines]);
+  }, [state.shouldUpdateCanvasSize, isCanvasSet, initGuideLines]);
 
   useEffect(() => {
-    if (isCanvasSet && ctx && !state.isCroppingImage) {
+    if (isCanvasSet && ctx && !state.isCropMode) {
       canvas.on('mouse:down', handleMouseDown);
-      canvas.on('object:moving', handleMoving);
+      canvas.on('object:moving', (e) => {
+        if (!eventState.isMoving){
+          eventDispatch({ type: 'setIsMoving', data: true });
+        }
+        handleMoving(e);
+      });
       canvas.on('before:render', handleBeforeRender);
       canvas.on('after:render', handleAfterRender);
       canvas.on('mouse:up', handleMouseUp);
-    } else if (state.isCroppingImage) removelistneres(canvas);
+    } else if (state.isCropMode) removelistneres(canvas);
     return () => {
       if (isCanvasSet && ctx) removelistneres(canvas);
     };
   }, [
-    state.isCroppingImage,
+    eventState,
+    eventDispatch,
+    state.shouldUpdateCanvasSize,
+    state.isCropMode,
     removelistneres,
     isCanvasSet,
     ctx,

@@ -2,11 +2,15 @@ import { useReducer } from 'react';
 
 const initialState = {
   canvasState: {
+    initialWidth: 526,
+    initialHeight: 741,
     width: 526,
     height: 741,
+    zoom: 1,
     backgroundColor: 'rgba(255,255,255,1)',
-    backgroundImage: 0,
+    backgroundImage: { type: '', src: null },
   },
+  shouldAddCanvas: true,
   shouldUpdateCanvas: false,
   shouldUpdateCanvasSize: false,
   shouldAddCanvasBgImage: false,
@@ -22,10 +26,15 @@ const initialState = {
   },
   imageState: {
     cornerRadius: 0,
+    isSvg: false,
   },
-  isCroppingImage: false,
+  isCropMode: false,
+  shouldCropImage: false,
   isImageDropdown: false,
   isShapeDropdown: false,
+  isResizeDropdown: false,
+  isZoomDropdown: false,
+  isDownloadDropdown: false,
   shouldAddText: false,
   shouldUpdateText: false,
   shouldUpdateShape: false,
@@ -47,15 +56,30 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setIsCroppingImage':
-      console.log('%c Setting Is Cropping Image', 'color: #ee4242');
-      return { ...state, isCroppingImage: action.data };
+    case 'setCanvasState':
+      console.log('%c Setting Is Canvas State', 'color: #ee4242');
+      return { ...state, canvasState: action.data };
+    case 'setIsDownloadDropdown':
+      console.log('%c Setting Is Download Dropdown', 'color: #ee4242');
+      return { ...state, isDownloadDropdown: action.data };
+    case 'setIsCropMode':
+      console.log('%c Setting Is Crop Mode', 'color: #ee4242');
+      return { ...state, isCropMode: action.data };
+    case 'setShouldCropImage':
+      console.log('%c Setting Should Crop Image', 'color: #ee4242');
+      return { ...state, shouldCropImage: action.data };
     case 'setIsImageDropdown':
       console.log('%c Setting Is Image Dropdown', 'color: #ee4242');
       return { ...state, isImageDropdown: action.data };
     case 'setIsShapeDropdown':
       console.log('%c Setting Is Shape Dropdown', 'color: #ee4242');
       return { ...state, isShapeDropdown: action.data };
+    case 'setIsResizeDropdown':
+      console.log('%c Setting Is Resize Dropdown', 'color: #ee4242');
+      return { ...state, isResizeDropdown: action.data };
+    case 'setIsZoomDropdown':
+      console.log('%c Setting Is Zoom Dropdown', 'color: #ee4242');
+      return { ...state, isZoomDropdown: action.data };
     case 'setCurrentCoords':
       console.log('%c Setting Coordinates', 'color: #ee4242');
       return { ...state, currentCoords: action.data };
@@ -80,11 +104,17 @@ const reducer = (state, action) => {
     case 'setShouldUpdateCanvas':
       console.log('%c Setting Should Update Canvas', 'color: #ee4242');
       return { ...state, shouldUpdateCanvas: action.data };
+    case 'setShouldAddCanvas':
+      console.log('%c Setting Should Add Canvas', 'color: #ee4242');
+      return { ...state, shouldAddCanvas: action.data };
     case 'setShouldUpdateCanvasSize':
       console.log('%c Setting Should Update Canvas Size', 'color: #ee4242');
       return { ...state, shouldUpdateCanvasSize: action.data };
     case 'setShouldAddCanvasBgImage':
-      console.log('%c Setting Should Set Canvas Background Image', 'color: #ee4242');
+      console.log(
+        '%c Setting Should Set Canvas Background Image',
+        'color: #ee4242'
+      );
       return { ...state, shouldAddCanvasBgImage: action.data };
     case 'setCurrentObject':
       console.log('%c Setting Current Object', 'color: #ee4242');
@@ -113,7 +143,7 @@ const reducer = (state, action) => {
         shouldUpdateCanvas: true,
         canvasState: {
           ...state.canvasState,
-          backgroundImage: 0,
+          backgroundImage: { type: '', src: null },
           backgroundColor: action.data,
         },
       };
@@ -135,6 +165,7 @@ const reducer = (state, action) => {
           ...state.canvasState,
           width: action.data.width,
           height: action.data.height,
+          zoom: action.data.zoom,
         },
       };
     case 'setImageCornerRadius':

@@ -9,7 +9,7 @@ const textPropertyArr = [
 ];
 
 const shapePropertyArr = ['fill', 'stroke', 'strokeWidth'];
-const imagePropertyArr = ['cornerRadius'];
+const imagePropertyArr = ['cornerRadius', 'isSvg'];
 
 const handleText = (e, dispatch) => {
   let newTextState = {};
@@ -53,31 +53,17 @@ const handleSelected = (e, dispatch) => {
   dispatch({ type: 'setCurrentObject', data: obj });
 };
 
-export const onCreated = (
-  e,
-  canvas,
-  dispatch,
-  setIsMoving,
-  showCanvasToolbar
-) => {
+export const onCreated = (e, dispatch, showCanvasToolbar) => {
   console.log('created');
   if (showCanvasToolbar) {
     dispatch({ type: 'setShowCanvasToolbar', data: false });
   }
-  if (e.target.type !== 'activeSelection') {
-    e.target.on('moving', () => setIsMoving(true));
-  }
   handleSelected(e, dispatch);
-  let canvasJSON = JSON.stringify(canvas);
-  sessionStorage.setItem('designCanvas', canvasJSON);
 };
 
-export const onCleared = (e, canvas, dispatch, currentId) => {
+export const onCleared = (e, dispatch, currentId) => {
   console.log('cleared');
   currentId.current = null;
-
-  if (e.deselected && e.deselected.length === 1) e.deselected[0].off('moving');
-
   dispatch({
     type: 'setCurrentObject',
     data: { type: '', object: null },
@@ -86,25 +72,17 @@ export const onCleared = (e, canvas, dispatch, currentId) => {
     type: 'setCurrentCoords',
     data: null,
   });
-  let canvasJSON = JSON.stringify(canvas);
-  sessionStorage.setItem('designCanvas', canvasJSON);
 };
 
-export const onModified = (e, canvas, dispatch) => {
+export const onModified = (e, dispatch) => {
   console.log('modified');
   handleSelected(e, dispatch);
-  let canvasJSON = JSON.stringify(canvas);
-  sessionStorage.setItem('designCanvas', canvasJSON);
 };
 
-export const onUpdated = (e, dispatch, setIsMoving) => {
+export const onUpdated = (e, dispatch) => {
   console.log('updated');
   dispatch({ type: 'setShowToolbar', data: false });
-  if (e.deselected.length === 1) e.deselected[0].off('moving');
   handleSelected(e, dispatch);
-  if (e.target.type !== 'activeSelection') {
-    e.target.on('moving', () => setIsMoving(true));
-  }
 };
 
 export const onTextEnter = (e, c, setIsEditingText) => {

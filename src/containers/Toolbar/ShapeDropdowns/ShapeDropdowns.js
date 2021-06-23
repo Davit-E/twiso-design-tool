@@ -53,10 +53,14 @@ const ShapeDropdowns = ({
   );
 
   useEffect(() => {
-    if (coords) {
-      handleDropdownPosition(coords, shapeToolbar, state.canvasHeight);
+    if (coords && shapeToolbar) {
+      handleDropdownPosition(
+        coords,
+        shapeToolbar,
+        state.canvasState.height * state.canvasState.zoom
+      );
     }
-  }, [handleDropdownPosition, shapeToolbar, state.canvasHeight, coords]);
+  }, [handleDropdownPosition, shapeToolbar, state.canvasState, coords]);
 
   return (
     <>

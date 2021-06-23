@@ -12,7 +12,7 @@ import TextToolbar from './TextToolbar/TextToolbar';
 import ShapeToolbar from './ShapeToolbar/ShapeToolbar';
 import ImageToolbar from './ImageToolbar/ImageToolbar';
 
-const Toolbar = () => {
+const Toolbar = ({ canvas }) => {
   const [coords, setCoords] = useState(null);
   const { appState } = useContext(AppContext);
   const toolbarRef = useRef(null);
@@ -30,20 +30,15 @@ const Toolbar = () => {
       setTransform(
         calcPosition(
           appState.currentCoords,
-          appState.canvasState.width,
-          appState.canvasState.height,
+          canvas.getWidth(),
+          canvas.getHeight(),
           toolbarRef.current,
           toolbarOffset,
           toolbarPadding
         )
       );
     }
-  }, [
-    setTransform,
-    appState.currentCoords,
-    appState.canvasState.width,
-    appState.canvasState.height,
-  ]);
+  }, [canvas, setTransform, appState.currentCoords, appState.isCroppingImage]);
 
   return (
     <div ref={toolbarRef} className={styles.Toolbar}>
