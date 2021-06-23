@@ -34,7 +34,6 @@ const keyDownHandler = (
   isCopying,
   setIsCopying
 ) => {
-  console.log(e);
   if (canvas) {
     if (
       e.code === 'Delete' ||
