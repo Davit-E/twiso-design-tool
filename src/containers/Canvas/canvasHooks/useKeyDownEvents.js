@@ -34,26 +34,25 @@ const keyDownHandler = (
   isCopying,
   setIsCopying
 ) => {
+  console.log(e);
   if (canvas) {
-    switch (e.keyCode) {
-      case 46:
-        deleteHandler(canvas);
-        break;
-      case 67:
-        if (e.ctrlKey) {
-          e.preventDefault();
-          // if (!isCopying) setIsCopying(true);
-        }
-        break;
-      case 86:
-        if (e.ctrlKey) {
-          e.preventDefault();
-          // if (!isPasting) setIsPasting(true);
-        }
-        break;
-
-      default:
-        break;
+    if (
+      e.code === 'Delete' ||
+      e.key === 'Delete' ||
+      e.code === 'Backspace' ||
+      e.key === 'Backspace'
+    ) {
+      deleteHandler(canvas);
+    } else if (e.code === 'KeyC' || e.key === 'c') {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        // if (!isCopying) setIsCopying(true);
+      }
+    } else if (e.code === 'KeyV' || e.key === 'v') {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        // if (!isPasting) setIsPasting(true);
+      }
     }
   }
 };
@@ -85,7 +84,7 @@ const useKeyDownEvents = (canvas) => {
     if (isPasting) {
       pasteHandler(canvas, objects, setObjects, setIsPasting);
     } else if (isCopying) {
-      copyHandler(canvas, setObjects, setIsCopying)
+      copyHandler(canvas, setObjects, setIsCopying);
     }
   }, [canvas, objects, isPasting, isCopying]);
 };

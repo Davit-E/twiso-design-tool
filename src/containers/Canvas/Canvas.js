@@ -32,15 +32,17 @@ const Canvas = ({
   const [currentCanvas, setCurrentCanvas] = useState(null);
   const [shouldChangeCanvas, setShouldChangecanvas] = useState(false);
   const [idCount, setIdCount] = useState(1);
+  const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
   const borderRef = useRef(null);
+  const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
   useGuidelines(appState, isCanvasSet, canvas);
   useKeyDownEvents(canvas);
-  useAddObject(appState, appDispatch, canvas);
+  useAddObject(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
   useSelectionObserver(isCanvasSet, canvas, appState, appDispatch);
   useUpdateObject(appState, appDispatch, canvas);
-  useCropImage(appState, appDispatch, canvas);
+  useCropImage(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
 
   const updateId = useCallback(
     (canvasId) => {
@@ -52,6 +54,9 @@ const Canvas = ({
 
   const canvasToolbarClickHandler = (e) => {
     if (e.target.id === 'borderContainer' || e.target.id === 'border') {
+      if (appState.isCropMode){
+        appDispatch({ type: 'setIsCropMode', data: false });
+      }
       let data = false;
       if (!appState.showCanvasToolbar) {
         data = true;

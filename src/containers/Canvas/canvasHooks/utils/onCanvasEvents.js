@@ -54,7 +54,6 @@ const handleSelected = (e, dispatch) => {
 };
 
 export const onCreated = (e, dispatch, showCanvasToolbar) => {
-  console.log('created');
   if (showCanvasToolbar) {
     dispatch({ type: 'setShowCanvasToolbar', data: false });
   }
@@ -62,7 +61,6 @@ export const onCreated = (e, dispatch, showCanvasToolbar) => {
 };
 
 export const onCleared = (e, dispatch, currentId) => {
-  console.log('cleared');
   currentId.current = null;
   dispatch({
     type: 'setCurrentObject',
@@ -75,12 +73,10 @@ export const onCleared = (e, dispatch, currentId) => {
 };
 
 export const onModified = (e, dispatch) => {
-  console.log('modified');
   handleSelected(e, dispatch);
 };
 
 export const onUpdated = (e, dispatch) => {
-  console.log('updated');
   dispatch({ type: 'setShowToolbar', data: false });
   handleSelected(e, dispatch);
 };

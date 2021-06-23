@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { addNewImage, addNewShape, addNewText } from './utils/addObject';
 
-const useAddObject = (state, dispatch, canvas) => {
-  const [id, setId] = useState(1);
-  const updatetId = () => setId((i) => i + 1);
-
+const useAddObject = (state, dispatch, canvas, id, updateId) => {
   useEffect(() => {
     if (state.shapeToAdd) {
-      addNewShape(state, canvas, dispatch, id, updatetId);
+      addNewShape(state, canvas, dispatch, id, updateId);
     } else if (state.imageToAdd) {
-      addNewImage(state, canvas, dispatch, id, updatetId);
+      addNewImage(state, canvas, dispatch, id, updateId);
     } else if (state.shouldAddText) {
-      addNewText(canvas, state, dispatch, id, updatetId);
+      addNewText(canvas, state, dispatch, id, updateId);
     }
-  }, [canvas, dispatch, state, id]);
+  }, [canvas, dispatch, state, id, updateId]);
 };
 
 export default useAddObject;

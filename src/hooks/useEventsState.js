@@ -7,7 +7,6 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'setIsMoving':
-      console.log('%c Setting Is Moving', 'color: #5705b1');
       return { ...state, isMoving: action.data };
 
     default:

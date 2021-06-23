@@ -6,7 +6,7 @@ import useAppState from './hooks/useAppState';
 
 const App = () => {
   const [appState, appDispatch] = useAppState();
-  console.log(appState);
+  // console.log(appState);
 
   return (
     <div className={styles.App}>

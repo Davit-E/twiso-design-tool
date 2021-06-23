@@ -27,7 +27,6 @@ const ImageDropdown = ({ setUserFiles, userFiles }) => {
       let file = fileInput.current.files[0];
       let type = 'image';
       if (file.type === 'image/svg+xml') type = 'svg';
-      console.log(file);
       setUserFiles((prevSate) => [
         { src: URL.createObjectURL(file), type },
         ...prevSate,
